@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LineChartView">
+        <attr name="labelAxisX" format="string|reference" />
+        <attr name="labelAxisY" format="string|reference" />
+        <attr name="labelTextSize" format="dimension" />
+        <attr name="chartLineColor" format="color|reference" />
+        <attr name="grid" format="boolean" />
+        <attr name="step" format="integer" />
+    </declare-styleable>
+
+</resources>
