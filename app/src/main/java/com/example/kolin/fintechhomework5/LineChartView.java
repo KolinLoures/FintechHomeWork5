@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -186,8 +187,6 @@ public class LineChartView extends View {
 
             canvas.drawLine(chartX1, chartY1, chartX2, chartY2, paintLines);
         }
-
-        paintLines.reset();
     }
 
     /**
@@ -203,8 +202,6 @@ public class LineChartView extends View {
             canvas.drawLine(XAxisDots[i], graphicRectF.bottom - dividingLength, XAxisDots[i], 0, paintLines);
             canvas.drawLine(graphicRectF.left + dividingLength, YAxisDots[i], graphicRectF.right, YAxisDots[i], paintLines);
         }
-
-        paintLines.reset();
     }
 
 
@@ -216,8 +213,6 @@ public class LineChartView extends View {
 
         drawXDividing(canvas);
         drawYDividing(canvas);
-
-        paintLabels.reset();
     }
 
     /**
