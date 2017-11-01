@@ -333,8 +333,6 @@ public class LineChartView extends View {
         paintLines.setColor(axisLineColor);
 
         canvas.drawRect(graphicRectF, paintLines);
-
-        paintLines.reset();
     }
 
     private void drawLabels(Canvas canvas) {
