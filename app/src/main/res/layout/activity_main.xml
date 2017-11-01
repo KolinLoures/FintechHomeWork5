@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        app:chartLineColor="@color/colorPrimary"
+        app:chartLineColor="@android:color/holo_red_dark"
         app:grid="true"
-        app:labelAxisX="label x"
+        app:labelAxisX="@string/app_name"
         app:labelAxisY="label y"
         app:labelTextSize="16sp"
         app:step="10" />

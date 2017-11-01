@@ -33,13 +33,11 @@ public class LineChartView extends View {
     private int chartLineColor = Color.RED;
 
     private float axisLineWidth = 2f;
+    private float chartLineWidth = 4f;
     private float gridLineWidth = 1f;
 
-    private Paint paintAxis;
-    private Paint paintGrid;
+    private Paint paintLines;
     private Paint paintLabels;
-    private Paint paintDividingLabels;
-    private Paint paintChartLine;
 
     private RectF commonRectF;
     private RectF graphicRectF;
@@ -48,26 +46,26 @@ public class LineChartView extends View {
     private float dividingLength = 8f;
     //Padding for dividing label
     private float dividingLabelPadding = 25f;
+
     //Step - count of parts on axis
     private int step = 5;
-
     // Dividing labels for X Axis
     private float[] XDividingLabels;
+
     // Dots for X Axis in graphicRectF
     private float[] XAxisDots;
-
     // Dividing labels for Y Axis
     private float[] YDividingLabels;
+
     // Dots for Y Axis in graphicRectF
     private float[] YAxisDots;
-
     // X offset
     private float xOffset = 0;
     // X lables offset
     private float xLabelOffset = 0;
     private float yOffset = 0;
-    private float yLabelOffset = 0;
 
+    private float yLabelOffset = 0;
     private List<Point> points;
 
     public LineChartView(Context context) {
@@ -107,38 +105,15 @@ public class LineChartView extends View {
             labelAxisY = "label Y";
         }
 
-        paintAxis = new Paint();
-        paintAxis.setStrokeWidth(axisLineWidth);
-        paintAxis.setColor(axisLineColor);
-        paintAxis.setStyle(Paint.Style.STROKE);
-        paintAxis.setAntiAlias(true);
+        paintLines = new Paint();
+        paintLines.setStyle(Paint.Style.STROKE);
+        paintLines.setAntiAlias(true);
 
-
-        paintGrid = new Paint();
-        paintGrid.setStrokeWidth(gridLineWidth);
-        paintGrid.setColor(gridLineColor);
-        paintGrid.setStyle(Paint.Style.STROKE);
-        paintGrid.setAntiAlias(true);
-
-        paintChartLine = new Paint();
-        paintChartLine.setStrokeWidth(4f);
-        paintChartLine.setColor(chartLineColor);
-        paintChartLine.setStyle(Paint.Style.STROKE);
-        paintChartLine.setAntiAlias(true);
 
         paintLabels = new Paint();
         paintLabels.setAntiAlias(true);
-        paintLabels.setTextSize(labelAxisTextSize);
         paintLabels.setStyle(Paint.Style.FILL);
-        paintLabels.setColor(axisLineColor);
         paintLabels.setTextAlign(Paint.Align.CENTER);
-
-        paintDividingLabels = new Paint();
-        paintDividingLabels.setAntiAlias(true);
-        paintDividingLabels.setTextSize(labelAxisTextSize / 2);
-        paintDividingLabels.setStyle(Paint.Style.FILL);
-        paintDividingLabels.setColor(axisLineColor);
-        paintDividingLabels.setTextAlign(Paint.Align.CENTER);
 
         commonRectF = new RectF();
         graphicRectF = new RectF();
@@ -174,6 +149,9 @@ public class LineChartView extends View {
 
     private void drawChartLine(Canvas canvas) {
 
+        paintLines.setStrokeWidth(chartLineWidth);
+        paintLines.setColor(chartLineColor);
+
         Collections.sort(points, new Comparator<Point>() {
             @Override
             public int compare(Point o1, Point o2) {
@@ -206,10 +184,10 @@ public class LineChartView extends View {
             //calculate stop Y
             float chartY2 = YAxisDots[0] - (y2 * factorY - factorX * YDividingLabels[0]);
 
-            canvas.drawLine(chartX1, chartY1, chartX2, chartY2, paintChartLine);
-
+            canvas.drawLine(chartX1, chartY1, chartX2, chartY2, paintLines);
         }
 
+        paintLines.reset();
     }
 
     /**
@@ -217,23 +195,37 @@ public class LineChartView extends View {
      */
     private void drawGrid(Canvas canvas) {
 
+        paintLines.setStrokeWidth(gridLineWidth);
+        paintLines.setColor(gridLineColor);
+
         //Paint vertical lines
         for (int i = 1; i < step; i++) {
-            canvas.drawLine(XAxisDots[i], graphicRectF.bottom - dividingLength, XAxisDots[i], 0, paintGrid);
-            canvas.drawLine(graphicRectF.left + dividingLength, YAxisDots[i], graphicRectF.right, YAxisDots[i], paintGrid);
+            canvas.drawLine(XAxisDots[i], graphicRectF.bottom - dividingLength, XAxisDots[i], 0, paintLines);
+            canvas.drawLine(graphicRectF.left + dividingLength, YAxisDots[i], graphicRectF.right, YAxisDots[i], paintLines);
         }
+
+        paintLines.reset();
     }
+
+
 
     private void drawDividing(Canvas canvas) {
 
+        paintLabels.setTextSize(labelAxisTextSize / 2);
+        paintLabels.setColor(axisLineColor);
+
         drawXDividing(canvas);
         drawYDividing(canvas);
+
+        paintLabels.reset();
     }
 
     /**
      * Draw dividing lines on X axis
      */
     private void drawXDividing(Canvas canvas) {
+
+
 
         for (int i = 0; i <= step; i++) {
 
@@ -242,13 +234,13 @@ public class LineChartView extends View {
             canvas.drawLine(
                     dot, graphicRectF.bottom - dividingLength,
                     dot, graphicRectF.bottom + dividingLength,
-                    paintAxis
+                    paintLines
             );
 
             if (i == step)
                 dot -= 20f;
 
-            canvas.drawText(formatFloat(XDividingLabels[i]), dot, graphicRectF.bottom + dividingLabelPadding, paintDividingLabels);
+            canvas.drawText(formatFloat(XDividingLabels[i]), dot, graphicRectF.bottom + dividingLabelPadding, paintLabels);
         }
     }
 
@@ -265,13 +257,13 @@ public class LineChartView extends View {
                     graphicRectF.left - dividingLength,
                     dot,
                     graphicRectF.left + dividingLength,
-                    dot, paintAxis
+                    dot, paintLines
             );
 
             if (i == step)
                 dot += 20f;
 
-            canvas.drawText(formatFloat(YDividingLabels[i]), graphicRectF.left - dividingLabelPadding, dot, paintDividingLabels);
+            canvas.drawText(formatFloat(YDividingLabels[i]), graphicRectF.left - dividingLabelPadding, dot, paintLabels);
 
         }
     }
@@ -341,10 +333,20 @@ public class LineChartView extends View {
 
 
     private void drawAxis(Canvas canvas) {
-        canvas.drawRect(graphicRectF, paintAxis);
+
+        paintLines.setStrokeWidth(axisLineWidth);
+        paintLines.setColor(axisLineColor);
+
+        canvas.drawRect(graphicRectF, paintLines);
+
+        paintLines.reset();
     }
 
     private void drawLabels(Canvas canvas) {
+
+        paintLabels.setTextSize(labelAxisTextSize);
+        paintLabels.setColor(axisLineColor);
+
 
         //Draw y axis label
         canvas.rotate(90);
